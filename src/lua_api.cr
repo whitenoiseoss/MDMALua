@@ -2,17 +2,19 @@
 lib LUA_API
     type LState = Void*
 
+    alias LCFunction = (LState -> LibC::Int)
+    alias LNumber = LibC::Double
+
     alias Alloc = (Void*, Void*, LibC::SizeT, LibC::SizeT -> Void*)
-    alias CFunction = (LState -> LibC::Int)
-    alias Number = LibC::Double
     alias PtrdiffT = LibC::Long
     alias Integer = PtrdiffT
     alias Unsigned = LibC::UInt
     alias Reader = (LState, Void*, LibC::SizeT* -> LibC::Char*)
     alias Writer = (LState, Void*, LibC::SizeT, Void* -> LibC::Int)
-    alias Hook = (LState, Debug* -> Void)
 
-    struct Debug
+    alias Hook = (LState, LDebug* -> Void)
+
+    struct LDebug
         event : LibC::Int
         name : LibC::Char*
         namewhat : LibC::Char*
@@ -52,7 +54,18 @@ lib LUA_API
     fun lua_type       = lua_type(l : LState, idx : LibC::Int) : LibC::Int
     fun lua_typename   = lua_typename(l : LState, tp : LibC::Int) : LibC::Char*
 
-    fun lua_tonumberx   = lua_tonumberx(l : LState, idx : LibC::Int, isnum : LibC::Int*) : Number
-    fun lua_tocfunction = lua_tocfunction(l : LState, idx : LibC::Int) : CFunction
+    fun lua_tonumberx   = lua_tonumberx(l : LState, idx : LibC::Int, isnum : LibC::Int*) : LNumber
+    fun lua_tocfunction = lua_tocfunction(l : LState, idx : LibC::Int) : LCFunction
     fun lua_toboolean   = lua_toboolean(l : LState, idx : LibC::Int) : LibC::Int
+    fun lua_tolstring   = lua_tolstring(l : LState, idx : LibC::Int, len : LibC::SizeT*) : LibC::Char*
+    fun lua_rawlen      = lua_rawlen(l : LState, idx : LibC::Int) : LibC::SizeT
+    fun lua_toCFunction = lua_toCFunction(l : LState, idx : LibC::Int) : LCFunction
+    fun lua_touserdata  = lua_touserdata(l : LState, idx : LibC::Int)
+    fun lua_tothread    = lua_tothread(l : LState, idx : LibC::Int) : LState
+    fun lua_topointer   = lua_topointer(l : LState, idx : LibC::Int) : Void*
+
+    # comparison and arithmetic functions
+    fun lua_arith    = lua_arith(l : LState, op : LibC::Int)
+    fun lua_rawequal = lua_rawequal(l : LState, idx1 : LibC::Int, idx2 : LibC::Int) : LibC::Int
+    fun lua_compare  = lua_compare(l : LState, idx1 : LibC::Int, idx2 : LibC::Int) : LibC::Int
 end
