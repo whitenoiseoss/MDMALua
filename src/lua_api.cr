@@ -3,11 +3,13 @@ lib LUA_API
     type LState = Void*
 
     alias LCFunction = (LState -> LibC::Int)
+    # #define LUA_NUMBER double
     alias LNumber = LibC::Double
+    # #define LUA_INTEGER __int64
+    alias LInteger = LibC::Long
 
     alias Alloc = (Void*, Void*, LibC::SizeT, LibC::SizeT -> Void*)
     alias PtrdiffT = LibC::Long
-    alias Integer = PtrdiffT
     alias Unsigned = LibC::UInt
     alias Reader = (LState, Void*, LibC::SizeT* -> LibC::Char*)
     alias Writer = (LState, Void*, LibC::SizeT, Void* -> LibC::Int)
