@@ -60,4 +60,10 @@ module MDMALua
         LINE  = 1 << LUA_HOOK::LINE
         COUNT = 1 << LUA_HOOK::COUNT
     end
+
+    enum LUA_RIDX
+        MAINTHREAD = 1
+        GLOBALS    = 2
+        LAST       = LUA_RIDX::GLOBALS
+    end
 end
